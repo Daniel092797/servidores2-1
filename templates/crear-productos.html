@@ -1,0 +1,27 @@
+{% extends 'plantilla.html'%}
+
+{% block tittle %} AGREGAR PRODCUTOS {% endblock%}
+
+{% block content %}
+ <div class="contenedor-productos-crear">
+    <h1>{%if productos %} Editar {% else %} Agregar {% endif %} Productos</h1>
+    <form action="" method="post">
+        <input type="hidden" name="id_producto" value="{{productos.id if productos else ''}}">
+        <!--espacio para el nombre-->
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" value="{{productos.nombre if productos else ''}}"required><br></br>
+        <!--espacio para la descripcion-->
+        <label for="descripcion">descripcion:</label>
+        <input type="text" name="descripcion" value="{{productos.descripcion if productos else ''}}"required><br></br>
+        <!--espacio para el precio-->
+        <label for="precio">precio:</label>
+        <input type="number" name="precio" value="{{productos.precio if productos else ''}}"required><br></br>
+        <!--espacio para el link de la imagen-->
+        <label for="imagen">Link de la imagen:</label>
+        <input type="text" name="imagen" value="{{productos.imagen if productos else ''}}"required><br></br>
+        <button type="submit">{% if productos %} Actualizar {% else %} Agregar {% endif%} </button>
+    </form>
+    <a href="{{url_for('productos')}}">volver a los productos</a>
+ </div>
+
+{% endblock%}

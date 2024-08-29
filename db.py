@@ -1,49 +1,48 @@
-import sqlite3
+import sqlite3 
 
-def get_db_conection():
-    conn = sqlite3.connect('productos.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+def conectar():
+    conector = sqlite3.connect('productos.db')
+    conector.row_factory = sqlite3.Row 
+    return conector 
 
 def init_db():
-    conn = get_db_conection()
-    conn.execute('''
-    CREATE TABLE IF NOT EXISTS products(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT,
-        price REAL NOT NULL,
-        image TEXT
-    )
-''')
-    conn.commit()
-    conn.close()
+    conector = conectar()
+    conector.execute('''
+        CREATE TABLE IF NOT EXISTS productos(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            descripcion TEXT,
+            precio REAL NOT NULL,
+            imagen TEXT         
+                     )
+        ''')
+    conector.commit()
+    conector.close()
 
 def get_all_products():
-    conn = get_db_conection()
-    products = conn.execute('SELECT * FROM products').fetchall()
-    conn.close()
-    return products
+    conector = conectar()
+    productos = conector.execute ('SELECT * FORM productos').fetchall()
+    conector.close()
+    return productos
 
-def add_product(name, description, price, image):
-    conn = get_db_conection()
-    conn.execute('INSERT INTO products (name, description, price, image) VALUES (?,?,?,?)', (name, description, price, image))
-    conn.commit()
-    conn.close()
+def add_product(nombre, descripcion, precio, imagen):
+    conector = conectar()
+    conector.execute('INSERT INTO productos(nombre, descripcion, precio, imagen) VALUES (?,?,?,?)',(nombre, descripcion, precio, imagen)) 
+    conector.commit()
+    conector.close()
 
-def update_product(product_id, name, description, price, image):
-    conn = get_db_conection()
-    conn.execute('''
-        UPDATE products 
-        SET name = ?, description = ?, price = ?, image = ? 
-        WHERE id = ?
-    ''', (name, description, price, image, product_id))
-    conn.commit()
-    conn.close()
+def update_products(id, nombre, descripcion, precio, imagen):
+    conector = conectar()
+    conector.execute(''' 
+    UPDATE productos
+    SET nombre=?, descripcion=?, precio=?, imagen=?
+    WHERE id=?
+    ''',(nombre, descripcion, precio, imagen, id))
+    conector.commit()
+    conector.close()
 
-
-def delete_product(producto_id):
-    conn = get_db_conection()
-    conn.execute('DELETE FROM products WHERE id = ?', (producto_id,))
-    conn.close()
+def delete_product(id):
+    conector = conectar()
+    conector.execute('DELETE FROM products WHERE id=?',(id,))
+    conector.close()
 

@@ -7,33 +7,22 @@ servidor2 = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@servidor2.route('/productos', methods=('GET', 'POST'))
-def products():
-    if request.method == 'POST':
-        if 'product_id' in request.form:
-            # Update product
-            product_id = request.form['product_id']
-            name = request.form['name']
-            description = request.form['description']
-            price = request.form['price']
-            image = request.form['image']
-            db.update_product(product_id, name, description, price, image)
-        else:
-            # Add product
-            name = request.form['name']
-            description = request.form['description']
-            price = request.form['price']
-            image = request.form['image']
-            db.add_product(name, description, price, image)
-        return redirect(url_for('products'))
-    
-    products = db.get_all_products()
-    return render_template('productos.html', products=products)
+@servidor2.route('/productos')
+def productos():
+    productos = db.get_all_products()
+    render_template('productos.html', productos=productos)
 
-@servidor2.route('/delete_product/<int:product_id>', methods=('POST',))
-def delete_product(product_id):
-    db.delete_product(product_id)
-    return redirect(url_for('products'))
+@servidor2.route('/productos/agregar', methods=('GET','POST'))
+def crear_productos():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        descripcion = request.form['descripcion']
+        precio = request.form ['precio']
+        imagen = request.form ['imagen']
+        db.add_product(nombre, descripcion, precio, imagen)
+        return redirect(url_for('productos'))
+    return render_template('crear-productos.html', productos=None)
+
 
 if __name__ == '__main__':
     db.init_db()
